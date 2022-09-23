@@ -1,0 +1,11 @@
+function solution(s) {
+    var answer = s;
+    let nums = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
+    
+    for(let i = 0; i<nums.length; i++){
+        let num = answer.split(nums[i]);
+        answer = num.join(i);
+        console.log(num);
+    }
+    return Number(answer);
+}
