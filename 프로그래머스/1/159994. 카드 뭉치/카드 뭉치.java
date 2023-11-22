@@ -2,16 +2,19 @@ import java.util.*;
 class Solution {
     public String solution(String[] cards1, String[] cards2, String[] goal) {
         String answer = "";
-        int idx1 = 0;
-        int idx2 = 0;
+        List<String> cardList1 = new ArrayList<>(Arrays.asList(cards1));;
+        List<String> cardList2 = new ArrayList<>(Arrays.asList(cards2));
         for(String word : goal){
-            if(idx1 < cards1.length && cards1[idx1].equals(word)){
-                idx1++;
-            }else if(idx2 < cards2.length && cards2[idx2].equals(word)){
-                idx2++;
-            } else {
-                return "No";
+            if(!cardList1.isEmpty() && cardList1.get(0).equals(word)){
+                cardList1.remove(0);
+                continue;
             }
+            if(!cardList2.isEmpty() && cardList2.get(0).equals(word)){
+                cardList2.remove(0);
+                continue;
+            }
+            return "No";
+            
         }
         return "Yes";
     }
