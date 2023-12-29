@@ -18,7 +18,6 @@ public class Main {
 	private static long router(int c, int max) {
 		int min_space = 1;
 		int max_space = max;
-		int result = 0;
 		while(min_space <= max_space) {
 			int count = 1;
 			int install_pos = houses[0];
@@ -29,12 +28,9 @@ public class Main {
 					install_pos = house;
 				}
 			}
-			if(count >= c) {
-				result = mid;
-				min_space = mid + 1;
-			}
+			if(count >= c) min_space = mid + 1;
 			else max_space = mid - 1;
 		}
-		return result;
+		return max_space;
 	}
 }
