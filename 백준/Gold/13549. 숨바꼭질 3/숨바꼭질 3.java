@@ -1,38 +1,37 @@
 import java.io.*;
 import java.util.*;
 public class Main {
-	static class Node{
+	static int n, k, min = Integer.MAX_VALUE;
+	static int max = 100000;
+	static boolean[] visited = new boolean[max + 1];
+	static class Node {
 		int x, time;
 		Node(int x, int time){
 			this.x = x;
 			this.time = time;
 		}
-	} 
-	static int n, k, min = Integer.MAX_VALUE;
-	static boolean[] visited = new boolean[100001];
-    public static void main(String[] args) throws IOException{
+	}
+    public static void main(String[] args) throws Exception {
     	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     	StringTokenizer st = new StringTokenizer(br.readLine());
-    	
     	n = Integer.parseInt(st.nextToken());
     	k = Integer.parseInt(st.nextToken());
+    	
     	bfs();
     	System.out.println(min);
-    }
-    public static void bfs() {
-    	Queue<Node> q = new LinkedList<>();
-    	q.offer(new Node(n, 0));
-    	while(!q.isEmpty()) {
-    		Node nd = q.poll();
-        	visited[nd.x] = true;
-    		if(nd.x == k) min = Math.min(min, nd.time);
     		
-    		if(nd.x*2 <= 100000 && !visited[nd.x*2]) 
-    			q.offer(new Node(nd.x*2, nd.time));
-    		if(nd.x+1 <= 100000 && !visited[nd.x+1]) 
-    			q.offer(new Node(nd.x+1, nd.time+1));
-    		if(nd.x-1 >= 0 && !visited[nd.x-1]) 
-    			q.offer(new Node(nd.x-1, nd.time+1));
-    	}
     }
-}
+    private static void bfs() {
+    	Queue<Node> q = new LinkedList<>();
+    	q.add(new Node(n, 0));
+    	while(!q.isEmpty()) {
+    		Node node = q.poll();
+    		visited[node.x] = true;
+    		if(node.x == k) min = Math.min(min, node.time);
+    		if(node.x * 2 <= max && !visited[node.x * 2])  q.add(new Node(node.x * 2 , node.time));
+    		if(node.x + 1 <= max && !visited[node.x + 1])  q.add(new Node(node.x + 1 , node.time+1));
+    		if(node.x - 1 >= 0 && !visited[node.x - 1])  q.add(new Node(node.x - 1 , node.time+1));
+    	}
+    	
+    }
+}  
