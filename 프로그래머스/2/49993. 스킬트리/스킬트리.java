@@ -2,9 +2,6 @@ import java.util.*;
 class Solution {
     public int solution(String skill, String[] skill_trees) {
         int answer = 0;
-        //char[] learn = skill.toCharArray();
-       // System.out.print(Arrays.toString(learn));
-        //boolean[] chk = new boolean[learn.length];
         for(String tree : skill_trees){
             String str = skill;
             boolean chk = true;
@@ -20,7 +17,6 @@ class Solution {
                 }
             }
             if(chk) answer++;
-            System.out.println();
         }
         return answer;
     }
