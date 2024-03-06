@@ -1,29 +1,26 @@
 import java.io.*;
 import java.util.*;
 public class Main {
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		
-		String word = br.readLine();
-		String[] arr = new String[3];
-		List<String> list = new ArrayList<>();
-		for(int i = 1; i < word.length()-1; i++) {
-			for(int j = i+1; j < word.length(); j++) {
-				arr[0] = word.substring(0,i);
-				arr[1] = word.substring(i,j);
-				arr[2] = word.substring(j, word.length());
-				StringBuilder sb = new StringBuilder();
-				for(int k = 0; k < 3; k++) {
-					StringBuilder reverse = new StringBuilder();
-					reverse.append(arr[k]).reverse();
-					sb.append(reverse);
+    public static void main(String[] args) throws Exception {
+    	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    	String s = br.readLine();
+    	List<String> list = new ArrayList<>();
+    	for(int i = 1; i < s.length()-1; i++) {
+    		String[] words = new String[3];
+    		for(int j = i+1; j < s.length(); j++) {
+    			words[0] = s.substring(0, i);
+    			words[1] = s.substring(i, j);
+    			words[2] = s.substring(j);
+    			StringBuilder sb  = new StringBuilder();
+    			for(String w : words) {
+    				StringBuilder rv = new StringBuilder();
+    				rv.append(w).reverse();
+    				sb.append(rv);
     			}
-				list.add(sb.toString());
-			}
-		}
-		Collections.sort(list);
+    			list.add(sb.toString());
+    		}
+    	}
+    	Collections.sort(list);
     	System.out.println(list.get(0));
-		
-	}
-	
-}
+    }
+} 
