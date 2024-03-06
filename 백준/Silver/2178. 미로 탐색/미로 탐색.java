@@ -1,62 +1,56 @@
 import java.io.*;
 import java.util.*;
 public class Main {
-	static boolean[][] visited;
-	static int[][] arr;
 	static int n, m;
-	static class Node {
-		int x;
-		int y;
-		public Node(int x, int y) {
+	static int[][] map;
+	static boolean[][] visited;
+	static int[] dx = {-1,1,0,0};
+	static int[] dy = {0,0,-1,1};
+	static class Point{
+		int x, y;
+		Point(int x, int y) {
 			this.x = x;
 			this.y = y;
 		}
 	}
-
-	static Queue<Node> q = new LinkedList<>();
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args) throws Exception {
     	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     	StringTokenizer st = new StringTokenizer(br.readLine());
-
-    	
     	n = Integer.parseInt(st.nextToken());
     	m = Integer.parseInt(st.nextToken());
-    	arr = new int[n][m];
-    	visited = new boolean[n][m];
-    	for(int i = 0; i < n; i++) {
-    		String s = br.readLine();
-    		for(int j = 0; j < m; j++) {
-        		arr[i][j] = Character.getNumericValue(s.charAt(j));
+    	
+    	map = new int[n+1][m+1];
+    	visited = new boolean[n+1][m+1];
+    	
+    	for(int i = 1; i <= n; i++) {
+    		String nums = br.readLine();
+    		for(int j = 1; j <= m; j++) {
+    			map[i][j] = nums.charAt(j-1) - '0';
     		}
     	}
-    	bfs(0,0);
-    	System.out.println(arr[n-1][m-1]);
-    	
-    }
-    public static void bfs(int x, int y) {
-    	q.offer(new Node(x,y));
-    	visited[y][x] = true;
 
-    	int[] dx = {0, 0, -1, 1};
-    	int[] dy = {-1, 1, 0, 0};
     	
-    	while(!q.isEmpty()) {
-    		Node node = q.poll();
-	    	for(int i = 0; i < 4; i++) {
-	    		int xx = dx[i] + node.x;
-	    		int yy = dy[i] + node.y;
-	    		
-	    		if(xx >= 0 && xx < m && yy>=0 && yy<n && visited[yy][xx] == false && arr[yy][xx] == 1) {
-	    			q.offer(new Node(xx, yy));
-	    			visited[yy][xx] = true;
-	    			arr[yy][xx] = arr[node.y][node.x]+1;
-	    			if(visited[n-1][m-1] == true) return;
-	    	
-	    		}
-	    		
-	    	}
-    	}
-    	
+		bfs(1,1);
+		System.out.println(map[n][m]);
     }
-    	
+    
+	private static void bfs(int x, int y) {
+		Queue<Point> q = new LinkedList<>();
+		q.offer(new Point(x, y));
+		visited[x][y] = true;
+		while(!q.isEmpty()) {
+			Point p = q.poll();
+			for(int i = 0; i < 4; i++) {
+				int xx = p.x + dx[i];
+				int yy = p.y + dy[i];
+				if(xx < 1 || yy < 1 || xx >= n+1 || yy >= m+1) continue;
+				if(!visited[xx][yy] && map[xx][yy] == 1) {
+					visited[xx][yy] = true;
+					q.offer(new Point(xx, yy));
+					map[xx][yy] = map[p.x][p.y] + 1;
+					if(xx == n && yy == m) return;
+				}
+			}
+		}
+	}
 } 
