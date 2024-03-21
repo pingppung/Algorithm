@@ -1,60 +1,59 @@
 import java.io.*;
 import java.util.*;
 public class Main {
-	static class Point{
-		int x, y, count;
-		Point(int x, int y, int count){
-			this.x = x;
-			this.y = y;
-			this.count = count;
-		}
-	} 
-	static int[] dx = {-1, 1, 0, 0};
-	static int[] dy = {0, 0, -1, 1};
-	static int N,M,count;
+	static int n, m, result = 0;
 	static char[][] map;
 	static boolean[][] visited;
-    public static void main(String[] args) throws IOException{
+	static int[] dx = {-1,1,0,0};
+	static int[] dy = {0,0,-1,1};
+	static class Land {
+		int x, y, time;
+		public Land(int x, int y, int time) {
+			this.x = x;
+			this.y = y;
+			this.time = time;
+		}
+	}
+    public static void main(String[] args) throws Exception {
     	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     	StringTokenizer st = new StringTokenizer(br.readLine());
-    	
-    	N = Integer.parseInt(st.nextToken());
-    	M = Integer.parseInt(st.nextToken());
-    	map = new char[N][M];
-    	for(int i = 0; i < N; i++) {
-    		String s = br.readLine();
-    		for(int j = 0; j < M; j++) {
-    			map[i][j] = s.charAt(j);
+    	n = Integer.parseInt(st.nextToken());
+    	m = Integer.parseInt(st.nextToken());
+    	map = new char[n][m];
+    	for(int i = 0; i < n; i++) {
+    		char[] arr = br.readLine().toCharArray();
+    		for(int j = 0; j < m; j++) {
+    			map[i][j] = arr[j];
     		}
     	}
-    	for(int i = 0; i < N; i++) {
-    		for(int j = 0; j < M; j++) {
+    	for(int i = 0; i < n; i++) {
+    		for(int j = 0; j < m; j++) {
     			if(map[i][j]=='L') {
-    				visited = new boolean[N][M];
+    				visited = new boolean[n][m];
     				bfs(i, j, 0);
     				
     			}
     		}
     	}
-    	System.out.println(count);
+    	System.out.println(result);
     }
-    public static void bfs(int x, int y, int cnt) {
-    	Queue<Point> q = new LinkedList<>();
-    	q.offer(new Point(x, y, cnt));
+    private static void bfs(int x, int y, int time) {
+    	Queue<Land> q = new LinkedList<>();
+    	q.offer(new Land(x, y, time));
     	visited[x][y] = true;
     	while(!q.isEmpty()) {
-    		Point p = q.poll();
-        	for(int i = 0; i < 4; i++) {
-        		int xx = p.x+dx[i];
-        		int yy = p.y+dy[i];
-        		if(xx < 0 || xx >= N || yy < 0 || yy >=M) continue;
-        		if(map[xx][yy] =='L'&& !visited[xx][yy]) {
-        			visited[xx][yy] = true;
-        			q.offer(new Point(xx, yy, p.count+1));
-        			count = Math.max(count, p.count+1);
-        		}
-        	}
-    		
+    		Land now = q.poll();
+    		for(int i =0 ;i < 4; i++) {
+    			int xx = now.x + dx[i];
+    			int yy = now.y + dy[i];
+    			if(xx <0 || yy<0 || xx>=n || yy>=m) continue;
+    			if(!visited[xx][yy] && map[xx][yy] == 'L') {
+    				visited[xx][yy] = true;
+    				q.offer(new Land(xx, yy, now.time + 1));
+
+    				result = Math.max(result, now.time + 1);
+    			}
+    		}
     	}
     }
-}
+}  
