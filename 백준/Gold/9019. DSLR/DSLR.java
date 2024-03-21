@@ -1,7 +1,6 @@
 import java.io.*;
 import java.util.*;
 public class Main {
-	static char[] commands = {'D', 'S', 'L', 'R'};
 	static boolean[] visited;
 	static class Node {
         int register;
@@ -14,23 +13,26 @@ public class Main {
     }   
     public static void main(String[] args) throws Exception {
     	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    	int T = Integer.parseInt(br.readLine());
-    	while(T-- > 0) {
-        	StringTokenizer st = new StringTokenizer(br.readLine());
-        	int A = Integer.parseInt(st.nextToken());
-        	int B = Integer.parseInt(st.nextToken());
-        	visited = new boolean[10000];
-        	System.out.println(bfs(A,B));
+    	int t = Integer.parseInt(br.readLine());
+    	while(t--> 0) {
+    		StringTokenizer st = new StringTokenizer(br.readLine());
+    		int a = Integer.parseInt(st.nextToken());
+    		int b = Integer.parseInt(st.nextToken());
+
+    		visited = new boolean[10000];
+    		System.out.println(change(a,b));
     	}
     }
-    private static String bfs(int A, int B) {
+    private static String change(int a, int b) {
+    	char[] commands = {'D', 'S', 'L', 'R'};
+    	
     	Queue<Node> q = new LinkedList<>();
-    	q.offer(new Node(A, ""));
-    	visited[A] = true;
+    	q.offer(new Node(a, ""));
+    	visited[a] = true;
     	while(!q.isEmpty()) {
     		Node n = q.poll();
-    		if(n.register == B) return n.result;
-    		
+
+			if(n.register == b) return n.result;
     		for(int i = 0; i < 4; i++) {
     			char command = commands[i];
     			int change = -1;
@@ -46,7 +48,6 @@ public class Main {
     			if(command == 'R') {
     				change = R(n.register);
     			}
-    			
     			if(!visited[change]) {
     				visited[change] = true;
     				q.offer(new Node(change, n.result + commands[i]));
