@@ -1,52 +1,54 @@
-import java.util.*;
+import java.util.Arrays;
 class Solution {
-    //static HashMap<String, Integer> indicates = new HashMap<>();
-    //static HashMap<String, Integer> given = new HashMap<>(); //준 횟수
-    //static HashMap<String, Integer> received = new HashMap<>(); //받은 횟수
-    static int[][] gr;
-    static HashMap<String, int[]> record = new HashMap<>();
-    static int[] nextGift;
+    int n;
+    int[][] gift_records; //선물 주고받은 기록 
+    int[] indices; // 선물 지수
     public int solution(String[] friends, String[] gifts) {
         int answer = 0;
         
-        int n = friends.length;
-        gr = new int[n][n];
-        nextGift = new int[n];
+        n = friends.length;
+        gift_records = new int[n][n];
+        indices = new int[n];
+        
         for(String gift : gifts){
-            String[] arr = gift.split(" ");
-            String A = arr[0];
-            String B = arr[1];
-            int A_idx = Arrays.asList(friends).indexOf(arr[0]);
-            int B_idx = Arrays.asList(friends).indexOf(arr[1]);
-            gr[A_idx][B_idx]++;
+            String[] names = gift.split(" ");
+            String A = names[0];
+            String B = names[1];
+            int A_Idx = Arrays.asList(friends).indexOf(A);
+            int B_Idx = Arrays.asList(friends).indexOf(B);
+            gift_records[A_Idx][B_Idx]++;
         }
+        
+        calIndices();// 선물 지수 구하는 메서드 호출
+        
+        int[] next_gift = new int[n];
         for(int i = 0; i < n; i++){
-            int given_Cnt = 0;
-            int received_Cnt = 0;
             for(int j = 0; j < n; j++){
                 if(i == j) continue;
-                given_Cnt += gr[i][j];
-                received_Cnt += gr[j][i];
-            }
-            record.put(friends[i], new int[] {given_Cnt, received_Cnt});
-        }
-        for(int i = 0; i < n; i++){
-            int[] people1 = record.get(friends[i]);
-            for(int j = 0; j < n; j++){
-                if(i == j) continue;
-                int[] people2 = record.get(friends[j]);
-                if(gr[i][j] > gr[j][i]){ //더 많은 선물을 준 사람이 다음 달에 선물+1
-                    nextGift[i]++;
-                } else if(gr[i][j] == gr[j][i]){ //선물을 주고받은 기록이 하나도 없거나 주고받은 수가 같다면
-                    int indicate1 = people1[0] - people1[1];
-                    int indicate2 = people2[0] - people2[1];
-                    if(indicate1 == indicate2) continue; 
-                    if(indicate1 > indicate2) { //선물 지수가 더 큰 사람이 선물 지수가 더 작은 사람에게 선물 받음+1
-                        nextGift[i]++;
-                    }
+                if(gift_records[i][j] > gift_records[j][i]) next_gift[i]++;
+                //횟수가 같을 경우   선물 지수가 작은 사람 -> 큰 사람 +1
+                else if(gift_records[i][j] == gift_records[j][i]){ 
+                    if(indices[i] == indices[j]) continue; //선물 지수도 같은 경우엔 패쓰
+                    if(indices[i] > indices[j]) next_gift[i]++;
                 }
             }
         }
-        return Arrays.stream(nextGift).max().getAsInt();
+        return Arrays.stream(next_gift).max().getAsInt();
+    }
+    private void calIndices(){
+        for(int i = 0; i < n; i++){
+            int cal = 0;
+            for(int j = 0; j < n; j++){
+                if(i == j) continue;
+                cal += gift_records[i][j] - gift_records[j][i];
+            }
+            indices[i] = cal;
+        }
     }
 }
+/* 선물 기록 
+1. 서로 준 횟수 비교해서  적은 사람 -> 많은 사람 + 1
+2. 횟수가 같을 경우   선물 지수가 작은 사람 -> 큰 사람 +1 (예외 - 선물 지수도 같은 경우엔 패쓰~)
+(선물 지수 = 친구에게 준 선물의 수 - 받은 선물의 수)
+목표 : 다음달 선물을 가장 많이 받을 친구의 선물 수
+*/
