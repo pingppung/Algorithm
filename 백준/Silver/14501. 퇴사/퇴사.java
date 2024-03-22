@@ -1,28 +1,31 @@
 import java.io.*;
 import java.util.*;
 public class Main {
-    public static void main(String[] args) throws IOException{
+	static int n ,result = 0;
+	static int[][] consult;
+    public static void main(String[] args) throws Exception {
     	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    	StringTokenizer st;
-    	int n = Integer.parseInt(br.readLine());
-    	int[] t = new int[n];
-    	int[] p = new int[n];
+    	n = Integer.parseInt(br.readLine());
+    	consult = new int[n][2];
     	for(int i = 0; i < n; i++) {
-    		st = new StringTokenizer(br.readLine());
-    		t[i] = Integer.parseInt(st.nextToken());
-    		p[i] = Integer.parseInt(st.nextToken());
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			consult[i][0] = Integer.parseInt(st.nextToken());
+			consult[i][1] = Integer.parseInt(st.nextToken());
+		}
+    	schedule(0,0);
+    	System.out.println(result);
+    }
+    private static void schedule(int date, int pay) {
+    	if(date >= n) {
+    		result = Math.max(pay, result);
+    		return;
     	}
-    	long[] dp = new long[1001];
-    
-    	for(int i = 0; i < n; i++) {
-	    	if(i+t[i] <= n) {
-	    		dp[i+t[i]] = Math.max(dp[i+t[i]], dp[i]+p[i]);
-	    	}
-	    	dp[i+1] = Math.max(dp[i+1], dp[i]);
+    	if(date + consult[date][0] <= n) {
+    		schedule(date + consult[date][0], pay + consult[date][1]);
+    	} else {
+    		schedule(date + consult[date][0], pay);
     	}
-
-    	
-    	System.out.println(dp[n]);
+    	schedule(date+1, pay);
     }
     
-}  
+}
