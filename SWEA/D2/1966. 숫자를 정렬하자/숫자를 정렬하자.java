@@ -1,12 +1,12 @@
 import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 public class Solution {
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int T = Integer.parseInt(br.readLine());
-		int[] money = {50000, 10000, 5000, 1000, 500, 100, 50, 10};
 		int idx = 1;
 		while(T-- > 0) {
 			int N = Integer.parseInt(br.readLine());
